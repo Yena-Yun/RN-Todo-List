@@ -9,5 +9,16 @@ declare module 'styled-components/native' {
       todoGray: string;
       bgBlack: string;
     };
+    sizes: {
+      size4: string;
+      size8: string;
+      size12: string;
+      size16: string;
+      size20: string;
+      size32: string;
+    };
+    weights: {
+      weight500: number;
+    };
   }
 }

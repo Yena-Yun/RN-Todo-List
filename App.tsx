@@ -10,6 +10,14 @@ import {
   themePrimary,
   themeActiveWhite,
   themeBgBlack,
+  cssFlex1,
+  cssJustifyCenter,
+  cssWidthFull,
+  themeSize12,
+  themeSize20,
+  themeSize32,
+  themeSize4,
+  themeWeight500,
 } from 'styles';
 
 export default function App() {
@@ -22,7 +30,7 @@ export default function App() {
       content: input,
       isDone: false,
     };
-    setTodos([...todos, newTodo]);
+    setTodos((todos) => [...todos, newTodo]);
     onChangeInput('');
   };
 
@@ -30,6 +38,11 @@ export default function App() {
     const newTodos = todos.map((todo) =>
       todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
     );
+    setTodos(newTodos);
+  };
+
+  const onDeleteTodo = (id: string) => {
+    const newTodos = todos.filter((todo) => todo.id !== id);
     setTodos(newTodos);
   };
 
@@ -44,7 +57,11 @@ export default function App() {
             onSubmitEditing={onSubmitEditing}
           />
         </TodoInputView>
-        <TodoList todos={todos} onCheckTodo={onCheckTodo} />
+        <TodoList
+          todos={todos}
+          onCheckTodo={onCheckTodo}
+          onDeleteTodo={onDeleteTodo}
+        />
         <StatusBar style='auto' />
       </Container>
     </ThemeProvider>
@@ -52,23 +69,23 @@ export default function App() {
 }
 
 const Container = styled.View`
-  flex: 1;
-  justify-content: center;
-  width: 100%;
-  padding: 20px;
+  ${cssFlex1}
+  ${cssJustifyCenter}
+  ${cssWidthFull}
+  padding: ${themeSize20};
   background-color: ${themeBgBlack};
 `;
 
 const Title = styled.Text`
-  margin-bottom: 12px;
-  padding-left: 4px;
-  font-size: 32px;
-  font-weight: 500;
+  margin-bottom: ${themeSize12};
+  padding-left: ${themeSize4};
+  font-size: ${themeSize32};
+  font-weight: ${themeWeight500};
   color: ${themePrimary};
 `;
 
 const TodoInputView = styled.View`
-  width: 100%;
+  ${cssWidthFull}
 `;
 
 const TodoInput = styled.TextInput.attrs({
@@ -76,6 +93,6 @@ const TodoInput = styled.TextInput.attrs({
   placeholderTextColor: primary,
 })`
   ${cssWrap}
-  margin-bottom: 12px;
+  margin-bottom: ${themeSize12};
   color: ${themeActiveWhite};
 `;
