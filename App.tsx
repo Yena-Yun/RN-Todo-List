@@ -52,16 +52,16 @@ export default function App() {
 }
 
 const Container = styled.View`
-  width: 100%;
   flex: 1;
+  justify-content: center;
+  width: 100%;
   padding: 20px;
   background-color: ${themeBgBlack};
-  justify-content: center;
 `;
 
 const Title = styled.Text`
-  padding-left: 4px;
   margin-bottom: 12px;
+  padding-left: 4px;
   font-size: 32px;
   font-weight: 500;
   color: ${themePrimary};

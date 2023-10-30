@@ -43,7 +43,7 @@ const TodoView = styled.TouchableOpacity`
 `;
 
 const TodoContent = styled.Text<IsDone>`
-  color: ${({ isDone }) => (isDone ? inactiveGray : activeWhite)};
   font-size: 16px;
+  color: ${({ isDone }) => (isDone ? inactiveGray : activeWhite)};
   ${({ isDone }) => isDone && 'text-decoration: line-through'};
 `;
