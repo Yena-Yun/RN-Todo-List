@@ -112,6 +112,7 @@ const cssWrap = css`
 const StyledInput = styled.TextInput`
   ${cssWrap}
   margin-bottom: 12px;
+  color: ${({ theme }) => theme.colors.activeWhite};
 `;
 
 const TodoList = styled.ScrollView`
