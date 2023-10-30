@@ -1,4 +1,5 @@
 export { cssWrap } from './css';
+export { theme } from './theme';
 
 export { primary } from './theme';
 export { activeWhite } from './theme';
