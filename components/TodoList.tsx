@@ -1,26 +1,21 @@
-import { useState } from 'react';
 import styled from 'styled-components/native';
 import { CheckIcon, EditIcon, DeleteIcon } from './icons';
 import { cssWrap, activeWhite, inactiveGray } from 'styles';
+import { Todo } from 'types';
 
 interface TodoListProps {
-  todos: string[];
+  todos: Todo[];
+  onCheckTodo: (id: string) => void;
 }
 
-export const TodoList = ({ todos }: TodoListProps) => {
-  const [isDone, setIsDone] = useState(false);
-
-  const onPressTodo = () => {
-    setIsDone((isDone) => !isDone);
-  };
-
+export const TodoList = ({ todos, onCheckTodo }: TodoListProps) => {
   return (
     <Container>
-      {todos.map((todo) => (
-        <TodoView key={todo} onPress={onPressTodo}>
+      {todos.map(({ id, content, isDone }) => (
+        <TodoView key={id} onPress={() => onCheckTodo(id)}>
           <FlexView>
             <CheckIcon isDone={isDone} />
-            <Todo isDone={isDone}>{todo}</Todo>
+            <TodoContent isDone={isDone}>{content}</TodoContent>
           </FlexView>
           <FlexView>
             {!isDone && <EditIcon />}
@@ -47,8 +42,8 @@ const TodoView = styled.TouchableOpacity`
   justify-content: space-between;
 `;
 
-const Todo = styled.Text<{ isDone: boolean }>`
-  color: ${({ theme, isDone }) => (isDone ? inactiveGray : activeWhite)};
+const TodoContent = styled.Text<{ isDone: boolean }>`
+  color: ${({ isDone }) => (isDone ? inactiveGray : activeWhite)};
   font-size: 16px;
   ${({ isDone }) => isDone && 'text-decoration: line-through'};
 `;

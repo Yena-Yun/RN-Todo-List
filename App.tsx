@@ -1,21 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
-import { TodoList } from 'components/TodoList';
+import { StatusBar } from 'expo-status-bar';
 import { TodoHeader } from 'components/TodoHeader';
-import { themeBgBlack } from 'styles';
-import { theme } from 'styles/theme';
-
-type Todo = string[];
+import { TodoList } from 'components/TodoList';
+import { theme, themeBgBlack } from 'styles/theme';
+import { Todo } from 'types';
 
 export default function App() {
   const [input, onChangeInput] = useState('');
-  const [todos, setTodos] = useState<Todo>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const onSubmitEditing = () => {
-    setTodos((todos) => [...todos, input]);
+    const newTodo = {
+      id: String(todos.length - 1),
+      content: input,
+      isDone: false,
+    };
+    setTodos([...todos, newTodo]);
     onChangeInput('');
   };
+
+    const onCheckTodo = (id: string) => {
+      const newTodos = todos.map((todo) =>
+        todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
+      );
+      setTodos(newTodos);
+    };
 
   return (
     <ThemeProvider theme={theme}>
@@ -25,7 +35,7 @@ export default function App() {
           onChangeInput={onChangeInput}
           onSubmitEditing={onSubmitEditing}
         />
-        <TodoList todos={todos} />
+        <TodoList todos={todos} onCheckTodo={onCheckTodo} />
         <StatusBar style='auto' />
       </Container>
     </ThemeProvider>
