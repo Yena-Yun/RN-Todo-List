@@ -1,12 +1,9 @@
-import { DefaultTheme } from 'styled-components';
-
-const myTheme: DefaultTheme = {
-  borderRadius: '5px',
-
+export const theme = {
   colors: {
-    main: 'cyan',
-    secondary: 'magenta',
+    primary: '#818fc0',
+    activeWhite: '#cecece',
+    inactiveGray: '#616161',
+    todoGray: '#313131',
+    bgBlack: '#101010',
   },
 };
-
-export { myTheme };

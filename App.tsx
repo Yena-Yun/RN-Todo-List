@@ -3,16 +3,7 @@ import { useState } from 'react';
 import styled, { ThemeProvider, css } from 'styled-components/native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-const theme = {
-  colors: {
-    primary: '#818fc0',
-    activeWhite: '#cecece',
-    inactiveGray: '#616161',
-    todoGray: '#313131',
-    bgBlack: '#101010',
-  },
-};
+import { theme } from './styles/theme';
 
 export default function App() {
   const [input, onChangeInput] = useState('');
