@@ -4,6 +4,4 @@ export interface Todo {
   isDone: boolean;
 }
 
-export interface IsDone {
-  isDone: boolean;
-}
+export type IsDone = Pick<Todo, 'isDone'>;
