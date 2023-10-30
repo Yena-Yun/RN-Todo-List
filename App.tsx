@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import styled, { ThemeProvider, css } from 'styled-components/native';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const theme = {
   colors: {
@@ -36,7 +38,24 @@ export default function App() {
         </StyledInputView>
         <TodoList>
           {todos.map((todo) => (
-            <Todo>{todo}</Todo>
+            <TodoView key={todo}>
+              <FeatherIcon
+                name='square'
+                size={24}
+                color={theme.colors.activeWhite}
+              />
+              <Todo>{todo}</Todo>
+              <MaterialCommunityIcon
+                name='pencil'
+                size={24}
+                color={theme.colors.activeWhite}
+              />
+              <MaterialCommunityIcon
+                name='trash-can-outline'
+                size={24}
+                color={theme.colors.activeWhite}
+              />
+            </TodoView>
           ))}
         </TodoList>
         <StatusBar style='auto' />
@@ -66,9 +85,11 @@ const StyledInputView = styled.View`
 `;
 
 const cssWrap = css`
+  width: 100%;
   height: 48px;
   font-size: 20px;
   padding: 12px;
+  padding-left: 16px;
   margin-bottom: 4px;
   border-radius: 8px;
   color: ${({ theme }) => theme.colors.activeWhite};
@@ -84,6 +105,13 @@ const TodoList = styled.View`
   width: 100%;
 `;
 
-const Todo = styled.Text`
+const TodoView = styled.View`
   ${cssWrap}
+  flex-direction: row;
+`;
+
+const Todo = styled.Text`
+  padding-left: 12px;
+  color: ${({ theme }) => theme.colors.activeWhite};
+  font-size: 16px;
 `;
