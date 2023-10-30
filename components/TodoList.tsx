@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import { CheckIcon, EditIcon, DeleteIcon } from './icons';
 import { cssWrap, activeWhite, inactiveGray } from 'styles';
-import { Todo } from 'types';
+import { Todo, IsDone } from 'types';
 
 interface TodoListProps {
   todos: Todo[];
@@ -42,7 +42,7 @@ const TodoView = styled.TouchableOpacity`
   justify-content: space-between;
 `;
 
-const TodoContent = styled.Text<{ isDone: boolean }>`
+const TodoContent = styled.Text<IsDone>`
   color: ${({ isDone }) => (isDone ? inactiveGray : activeWhite)};
   font-size: 16px;
   ${({ isDone }) => isDone && 'text-decoration: line-through'};

@@ -1,11 +1,8 @@
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { activeWhite, inactiveGray } from 'styles';
+import { IsDone } from 'types';
 
-interface DeleteIconProps {
-  isDone: boolean;
-}
-
-export const DeleteIcon = ({ isDone }: DeleteIconProps) => {
+export const DeleteIcon = ({ isDone }: IsDone) => {
   return (
     <MaterialCommunityIcon
       name='trash-can-outline'

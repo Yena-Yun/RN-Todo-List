@@ -3,3 +3,7 @@ export interface Todo {
   content: string;
   isDone: boolean;
 }
+
+export interface IsDone {
+  isDone: boolean;
+}
