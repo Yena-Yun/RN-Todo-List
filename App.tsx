@@ -15,12 +15,17 @@ const theme = {
 };
 
 export default function App() {
-  const [text, onChangeText] = useState('');
+  const [input, onChangeInput] = useState('');
   const [todos, setTodos] = useState<string[]>([]);
+  const [isDone, setIsDone] = useState(false);
 
   const onSubmitEditing = () => {
-    setTodos([...todos, text]);
-    onChangeText('');
+    setTodos((todos) => [...todos, input]);
+    onChangeInput('');
+  };
+
+  const onPressTodo = () => {
+    setIsDone((isDone) => !isDone);
   };
 
   return (
@@ -29,8 +34,8 @@ export default function App() {
         <Title>TODO List</Title>
         <StyledInputView>
           <StyledInput
-            value={text}
-            onChangeText={onChangeText}
+            value={input}
+            onChangeText={onChangeInput}
             placeholder='+ Add a Task'
             placeholderTextColor={theme.colors.primary}
             onSubmitEditing={onSubmitEditing}
@@ -38,23 +43,37 @@ export default function App() {
         </StyledInputView>
         <TodoList>
           {todos.map((todo) => (
-            <TodoView key={todo}>
-              <FeatherIcon
-                name='square'
-                size={24}
-                color={theme.colors.activeWhite}
-              />
-              <Todo>{todo}</Todo>
-              <MaterialCommunityIcon
-                name='pencil'
-                size={24}
-                color={theme.colors.activeWhite}
-              />
-              <MaterialCommunityIcon
-                name='trash-can-outline'
-                size={24}
-                color={theme.colors.activeWhite}
-              />
+            <TodoView key={todo} onPress={onPressTodo}>
+              <FlexView>
+                <FeatherIcon
+                  name={`${isDone ? 'check-square' : 'square'}`}
+                  size={24}
+                  color={
+                    isDone
+                      ? theme.colors.inactiveGray
+                      : theme.colors.activeWhite
+                  }
+                />
+                <Todo isDone={isDone}>{todo}</Todo>
+              </FlexView>
+              <FlexView>
+                {!isDone && (
+                  <MaterialCommunityIcon
+                    name='pencil'
+                    size={24}
+                    color={theme.colors.activeWhite}
+                  />
+                )}
+                <MaterialCommunityIcon
+                  name='trash-can-outline'
+                  size={24}
+                  color={
+                    isDone
+                      ? theme.colors.inactiveGray
+                      : theme.colors.activeWhite
+                  }
+                />
+              </FlexView>
             </TodoView>
           ))}
         </TodoList>
@@ -70,6 +89,11 @@ const Container = styled.View`
   padding: 20px;
   background-color: ${({ theme }) => theme.colors.bgBlack};
   justify-content: center;
+`;
+
+const FlexView = styled.View`
+  flex-direction: row;
+  gap: 12px;
 `;
 
 const Title = styled.Text`
@@ -88,11 +112,9 @@ const cssWrap = css`
   width: 100%;
   height: 48px;
   font-size: 20px;
-  padding: 12px;
-  padding-left: 16px;
+  padding: 12px 16px;
   margin-bottom: 4px;
   border-radius: 8px;
-  color: ${({ theme }) => theme.colors.activeWhite};
   background-color: ${({ theme }) => theme.colors.todoGray};
 `;
 
@@ -101,17 +123,19 @@ const StyledInput = styled.TextInput`
   margin-bottom: 12px;
 `;
 
-const TodoList = styled.View`
+const TodoList = styled.ScrollView`
   width: 100%;
 `;
 
-const TodoView = styled.View`
+const TodoView = styled.TouchableOpacity`
   ${cssWrap}
   flex-direction: row;
+  justify-content: space-between;
 `;
 
-const Todo = styled.Text`
-  padding-left: 12px;
-  color: ${({ theme }) => theme.colors.activeWhite};
+const Todo = styled.Text<{ isDone: boolean }>`
+  color: ${({ theme, isDone }) =>
+    isDone ? theme.colors.inactiveGray : theme.colors.activeWhite};
   font-size: 16px;
+  ${({ isDone }) => isDone && 'text-decoration: line-through'};
 `;
