@@ -2,15 +2,15 @@ import { useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { StatusBar } from 'expo-status-bar';
 import { TodoList } from 'components/TodoList';
+import { Todo } from 'types';
 import {
   theme,
   cssWrap,
   primary,
   themePrimary,
-  themeActiveWhite,themeBgBlack,
+  themeActiveWhite,
+  themeBgBlack,
 } from 'styles';
-import { Todo } from 'types';
-
 
 export default function App() {
   const [input, onChangeInput] = useState('');
@@ -26,26 +26,24 @@ export default function App() {
     onChangeInput('');
   };
 
-    const onCheckTodo = (id: string) => {
-      const newTodos = todos.map((todo) =>
-        todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
-      );
-      setTodos(newTodos);
-    };
+  const onCheckTodo = (id: string) => {
+    const newTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
+    );
+    setTodos(newTodos);
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <Container>
         <Title>TODO List</Title>
-        <StyledInputView>
-          <StyledInput
+        <TodoInputView>
+          <TodoInput
             value={input}
             onChangeText={onChangeInput}
-            placeholder='+ Add a Task'
-            placeholderTextColor={primary}
             onSubmitEditing={onSubmitEditing}
           />
-        </StyledInputView>
+        </TodoInputView>
         <TodoList todos={todos} onCheckTodo={onCheckTodo} />
         <StatusBar style='auto' />
       </Container>
@@ -69,11 +67,14 @@ const Title = styled.Text`
   color: ${themePrimary};
 `;
 
-const StyledInputView = styled.View`
+const TodoInputView = styled.View`
   width: 100%;
 `;
 
-const StyledInput = styled.TextInput`
+const TodoInput = styled.TextInput.attrs({
+  placeholder: '+ Add a Task',
+  placeholderTextColor: primary,
+})`
   ${cssWrap}
   margin-bottom: 12px;
   color: ${themeActiveWhite};
