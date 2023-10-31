@@ -1,44 +1,62 @@
 import { useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { StatusBar } from 'expo-status-bar';
-import { TodoList } from 'components/TodoList';
-import { Todo } from 'types';
+import { CheckIcon, EditIcon, DeleteIcon } from 'components/icons';
+import { IsDone, Todo } from 'types';
 import {
   theme,
   cssWrap,
   primary,
+  activeWhite,
+  inactiveGray,
   themePrimary,
   themeActiveWhite,
   themeBgBlack,
   cssFlex1,
   cssJustifyCenter,
+  cssFlexRow,
+  cssJustifyBetween,
   cssWidthFull,
   themeSize12,
+  themeSize16,
   themeSize20,
   themeSize32,
   themeSize4,
   themeWeight500,
 } from 'styles';
+import { TouchableOpacity } from 'react-native';
 
 export default function App() {
-  const [input, onChangeInput] = useState('');
+  const [initialInput, onChange] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isEdit, setIsEdit] = useState(false);
+  const [editContent, onEditContent] = useState('');
 
-  const onSubmitEditing = () => {
+  const onCreateTodo = () => {
     const newTodo = {
       id: String(todos.length - 1),
-      content: input,
+      content: initialInput,
       isDone: false,
     };
     setTodos((todos) => [...todos, newTodo]);
-    onChangeInput('');
+    onChange('');
   };
 
   const onCheckTodo = (id: string) => {
     const newTodos = todos.map((todo) =>
       todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
     );
-    setTodos(newTodos); 
+    setTodos(newTodos);
+  };
+
+  const handleIsEdit = () => setIsEdit(true);
+
+  const onEditTodo = (id: string, editedTodo: string) => {
+    const newTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, content: editedTodo } : todo
+    );
+    setTodos(newTodos);
+    setIsEdit(false);
   };
 
   const onDeleteTodo = (id: string) => {
@@ -51,17 +69,44 @@ export default function App() {
       <Container>
         <Title>TODO List</Title>
         <TodoInputView>
-          <TodoInput
-            value={input}
-            onChangeText={onChangeInput}
-            onSubmitEditing={onSubmitEditing}
+          <TodoTextInput
+            value={initialInput}
+            onChangeText={onChange}
+            onSubmitEditing={onCreateTodo}
           />
         </TodoInputView>
-        <TodoList
-          todos={todos}
-          onCheckTodo={onCheckTodo}
-          onDeleteTodo={onDeleteTodo}
-        />
+        <TodoList>
+          {todos.map(({ id, content, isDone }) => (
+            <TodoView key={id}>
+              {isEdit ? (
+                <>
+                  <EditTextInput
+                    value={editContent || content}
+                    onChangeText={onEditContent}
+                    onSubmitEditing={() => onEditTodo(id, editContent)}
+                  />
+                </>
+              ) : (
+                <>
+                  <TodoTouchable onPress={() => onCheckTodo(id)}>
+                    <CheckIcon isDone={isDone} />
+                    <TodoContent isDone={isDone}>{content}</TodoContent>
+                  </TodoTouchable>
+                  <ButtonGroupView>
+                    {!isDone && (
+                      <TouchableOpacity onPress={handleIsEdit}>
+                        <EditIcon />
+                      </TouchableOpacity>
+                    )}
+                    <TouchableOpacity onPress={() => onDeleteTodo(id)}>
+                      <DeleteIcon isDone={isDone} />
+                    </TouchableOpacity>
+                  </ButtonGroupView>
+                </>
+              )}
+            </TodoView>
+          ))}
+        </TodoList>
         <StatusBar style='auto' />
       </Container>
     </ThemeProvider>
@@ -88,11 +133,42 @@ const TodoInputView = styled.View`
   ${cssWidthFull}
 `;
 
-const TodoInput = styled.TextInput.attrs({
+const TodoTextInput = styled.TextInput.attrs({
   placeholder: '+ Add a Task',
   placeholderTextColor: primary,
 })`
   ${cssWrap}
   margin-bottom: ${themeSize12};
   color: ${themeActiveWhite};
+`;
+const TodoList = styled.ScrollView`
+  ${cssWidthFull}
+`;
+
+const EditTextInput = styled.TextInput`
+  width: 90%;
+  color: #ffffff;
+`;
+
+const TodoView = styled.View`
+  ${cssWrap}
+  ${cssFlexRow}
+  ${cssJustifyBetween}
+`;
+
+const TodoTouchable = styled.TouchableOpacity`
+  ${cssFlexRow}
+  gap: ${themeSize12};
+  width: 80%;
+`;
+
+const TodoContent = styled.Text<IsDone>`
+  font-size: ${themeSize16};
+  color: ${({ isDone }) => (isDone ? inactiveGray : activeWhite)};
+  ${({ isDone }) => isDone && 'text-decoration: line-through'};
+`;
+
+const ButtonGroupView = styled.View`
+  ${cssFlexRow}
+  gap: ${themeSize12};
 `;
