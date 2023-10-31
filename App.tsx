@@ -31,6 +31,7 @@ export default function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, onEditContent] = useState('');
+  const [editIndex, setEditIndex] = useState('');
 
   const onCreateTodo = () => {
     const newTodo = {
@@ -49,7 +50,10 @@ export default function App() {
     setTodos(newTodos);
   };
 
-  const handleIsEdit = () => setIsEdit(true);
+  const handleIsEdit = (id: string) => {
+    setIsEdit(true);
+    setEditIndex(id);
+  };
 
   const onEditTodo = (id: string, editedTodo: string) => {
     const newTodos = todos.map((todo) =>
@@ -78,10 +82,10 @@ export default function App() {
         <TodoList>
           {todos.map(({ id, content, isDone }) => (
             <TodoView key={id}>
-              {isEdit ? (
+              {isEdit && id === editIndex ? (
                 <>
                   <EditTextInput
-                    value={editContent || content}
+                    value={editContent}
                     onChangeText={onEditContent}
                     onSubmitEditing={() => onEditTodo(id, editContent)}
                   />
@@ -94,7 +98,7 @@ export default function App() {
                   </TodoTouchable>
                   <ButtonGroupView>
                     {!isDone && (
-                      <TouchableOpacity onPress={handleIsEdit}>
+                      <TouchableOpacity onPress={() => handleIsEdit(id)}>
                         <EditIcon />
                       </TouchableOpacity>
                     )}
