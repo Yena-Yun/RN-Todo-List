@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { StatusBar } from 'expo-status-bar';
 import { CheckIcon, EditIcon, DeleteIcon } from 'components/icons';
@@ -24,9 +24,10 @@ import {
   themeSize4,
   themeWeight500,
 } from 'styles';
-import { TouchableOpacity } from 'react-native';
+import { TextInput,  TouchableOpacity } from 'react-native';
 
 export default function App() {
+  const editInputRef = useRef<TextInput | null>(null);
   const [initialInput, onChange] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isEdit, setIsEdit] = useState(false);
@@ -60,6 +61,7 @@ export default function App() {
       todo.id === id ? { ...todo, content: editedTodo } : todo
     );
     setTodos(newTodos);
+    onEditContent('');
     setIsEdit(false);
   };
 
@@ -67,6 +69,10 @@ export default function App() {
     const newTodos = todos.filter((todo) => todo.id !== id);
     setTodos(newTodos);
   };
+
+  useEffect(() => {
+    if (editInputRef.current) editInputRef.current.focus();
+  }, [isEdit]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -85,6 +91,7 @@ export default function App() {
               {isEdit && id === editIndex ? (
                 <>
                   <EditTextInput
+                    ref={editInputRef}
                     value={editContent}
                     onChangeText={onEditContent}
                     onSubmitEditing={() => onEditTodo(id, editContent)}
