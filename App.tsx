@@ -38,7 +38,7 @@ export default function App() {
     const newTodos = todos.map((todo) =>
       todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
     );
-    setTodos(newTodos);
+    setTodos(newTodos); 
   };
 
   const onDeleteTodo = (id: string) => {
