@@ -10,9 +10,9 @@
       "tsconfigPaths": true
     },
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/check_3000.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#313131"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {

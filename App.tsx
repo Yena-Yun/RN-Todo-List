@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { StatusBar } from 'expo-status-bar';
 import uuid from 'react-native-uuid';
+import * as SplashScreen from 'expo-splash-screen';
 import { CheckIcon, EditIcon, DeleteIcon } from 'components/icons';
 import { IsDone, Todo } from 'types';
 import {
@@ -34,6 +35,14 @@ export default function App() {
   const [editContent, onEditContent] = useState('');
   const [isEdit, setIsEdit] = useState(false);
   const [editIndex, setEditIndex] = useState('');
+
+  SplashScreen.preventAutoHideAsync();
+
+  useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hideAsync();
+    }, 1000);
+  }, []);
 
   const onCreateTodo = () => {
     const newTodo = {
