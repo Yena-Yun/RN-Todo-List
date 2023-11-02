@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
-import { TextInput, TouchableOpacity } from 'react-native';
+import { View, TextInput, TouchableOpacity } from 'react-native';
 import uuid from 'react-native-uuid';
 import { StatusBar } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
+import { TodoInput } from 'components/TodoInput';
 import { CheckIcon, EditIcon, DeleteIcon } from 'components/icons';
 import { getItem, setItem } from 'storage/asyncStorage';
 import { IsDone, Todo } from 'types';
@@ -87,28 +88,28 @@ export default function App() {
     <ThemeProvider theme={S.theme}>
       <Container>
         <Title>TODO List</Title>
-        <TodoInputView>
-          <TodoTextInput
+        <View>
+          <TodoInput
             value={initialInput}
             onChangeText={onChange}
             onSubmitEditing={onCreateTodo}
+            placeholder='+ Add a Task'
           />
-        </TodoInputView>
+        </View>
         <TodoList>
           {storageValues.length > 0 &&
             storageValues.map(({ id, content, isDone }) => (
-              <TodoView key={id}>
+              <Fragment key={id}>
                 {isEdit && id === editIndex ? (
-                  <>
-                    <EditTextInput
-                      ref={editInputRef}
-                      value={editContent}
-                      onChangeText={onEditContent}
-                      onSubmitEditing={() => onEditTodo(id, editContent)}
-                    />
-                  </>
+                  <TodoInput
+                    ref={editInputRef}
+                    value={editContent}
+                    onChangeText={onEditContent}
+                    onSubmitEditing={() => onEditTodo(id, editContent)}
+                    placeholder='Edit a Task'
+                  />
                 ) : (
-                  <>
+                  <TodoView>
                     <TodoTouchable onPress={() => onCheckTodo(id)}>
                       <CheckIcon isDone={isDone} />
                       <TodoContent isDone={isDone}>{content}</TodoContent>
@@ -123,9 +124,9 @@ export default function App() {
                         <DeleteIcon isDone={isDone} />
                       </TouchableOpacity>
                     </ButtonGroupView>
-                  </>
+                  </TodoView>
                 )}
-              </TodoView>
+              </Fragment>
             ))}
         </TodoList>
         <StatusBar barStyle='light-content' backgroundColor={S.bgBlack} />
@@ -150,29 +151,12 @@ const Title = styled.Text`
   color: ${S.themePrimary};
 `;
 
-const TodoInputView = styled.View`
-  ${S.cssWidthFull}
-`;
-
-const TodoTextInput = styled.TextInput.attrs({
-  placeholder: '+ Add a Task',
-  placeholderTextColor: S.primary,
-})`
-  ${S.cssWrap}
-  margin-bottom: ${S.themeSize12};
-  color: ${S.themeActiveWhite};
-`;
 const TodoList = styled.ScrollView`
   ${S.cssWidthFull}
 `;
 
-const EditTextInput = styled.TextInput`
-  width: 90%;
-  color: #ffffff;
-`;
-
 const TodoView = styled.View`
-  ${S.cssWrap}
+  ${S.cssTodoContainer}
   ${S.cssFlexRow}
   ${S.cssJustifyBetween}
 `;
