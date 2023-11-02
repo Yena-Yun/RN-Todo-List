@@ -18,3 +18,9 @@
   * 색상 관련 속성
     * `backgroundColor`: StatusBar의 배경색 변경
     * `barStyle`: StatusBar의 시간, 와이파이 등 글자색 변경 (default, light-content, dark-content 3가지)
+
+
+## 트러블 슈팅
+* TodoInput을 모듈화하는 과정 중 `missed semicolon` 에러가 발생했다.
+  * 세미콜론이 miss된 곳을 도저히 찾을 수 없었고 vscode 세미콜론 setting도 해봤지만 소용 없었다.
+  * 해결: css.ts에 ${theme.size60} 등의 import해온 style 코드를 넣으면 발생한다는 걸 알게 되어 '60px' 등으로 다시 수정했다.
