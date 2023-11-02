@@ -1,15 +1,5 @@
 import { css } from 'styled-components/native';
 
-export const cssWrap = css`
-  width: 100%;
-  height: 48px;
-  margin-bottom: 4px;
-  padding: 12px 16px;
-  font-size: 20px;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.colors.todoGray};
-`;
-
 export const cssFlex1 = css`
   flex: 1;
 `;
@@ -28,4 +18,15 @@ export const cssJustifyBetween = css`
 
 export const cssWidthFull = css`
   width: 100%;
+`;
+
+export const cssTodoContainer = css`
+  width: 100%;
+  height: 60px;
+  margin-bottom: 12px;
+  padding: 12px 20px;
+  font-size: 20px;
+  color: #eeeeee;
+  border-radius: 8px;
+  background-color: #333333;
 `;

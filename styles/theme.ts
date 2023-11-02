@@ -13,6 +13,7 @@ export const theme = {
     size16: '16px',
     size20: '20px',
     size32: '32px',
+    size60: '60px',
   },
   weights: {
     weight500: 500,
@@ -42,5 +43,6 @@ export const themeSize12 = ({ theme }: Theme) => theme.sizes.size12;
 export const themeSize16 = ({ theme }: Theme) => theme.sizes.size16;
 export const themeSize20 = ({ theme }: Theme) => theme.sizes.size20;
 export const themeSize32 = ({ theme }: Theme) => theme.sizes.size32;
+export const themeSize60 = ({ theme }: Theme) => theme.sizes.size60;
 
 export const themeWeight500 = ({ theme }: Theme) => theme.weights.weight500;

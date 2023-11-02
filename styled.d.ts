@@ -16,6 +16,7 @@ declare module 'styled-components/native' {
       size16: string;
       size20: string;
       size32: string;
+      size60: string;
     };
     weights: {
       weight500: number;
