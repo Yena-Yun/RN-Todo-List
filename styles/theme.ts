@@ -1,10 +1,10 @@
 export const theme = {
   colors: {
-    primary: '#8694dd',
-    activeWhite: '#cecece',
-    inactiveGray: '#616161',
-    todoGray: '#313131',
-    bgBlack: '#101010',
+    primary: '#778bdd',
+    activeWhite: '#eeeeee',
+    inactiveGray: '#666666',
+    todoGray: '#333333',
+    bgBlack: '#111111',
   },
   sizes: {
     size4: '4px',
