@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { TextInput, TouchableOpacity } from 'react-native';
 import uuid from 'react-native-uuid';
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { CheckIcon, EditIcon, DeleteIcon } from 'components/icons';
 import { getItem, setItem } from 'storage/asyncStorage';
@@ -128,7 +128,7 @@ export default function App() {
               </TodoView>
             ))}
         </TodoList>
-        <StatusBar style='auto' />
+        <StatusBar barStyle='light-content' backgroundColor={S.bgBlack} />
       </Container>
     </ThemeProvider>
   );
