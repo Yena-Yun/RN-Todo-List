@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { StatusBar } from 'expo-status-bar';
+import uuid from 'react-native-uuid';
 import { CheckIcon, EditIcon, DeleteIcon } from 'components/icons';
 import { IsDone, Todo } from 'types';
 import {
@@ -24,19 +25,19 @@ import {
   themeSize4,
   themeWeight500,
 } from 'styles';
-import { TextInput,  TouchableOpacity } from 'react-native';
+import { TextInput, TouchableOpacity } from 'react-native';
 
 export default function App() {
   const editInputRef = useRef<TextInput | null>(null);
   const [initialInput, onChange] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [isEdit, setIsEdit] = useState(false);
   const [editContent, onEditContent] = useState('');
+  const [isEdit, setIsEdit] = useState(false);
   const [editIndex, setEditIndex] = useState('');
 
   const onCreateTodo = () => {
     const newTodo = {
-      id: String(todos.length - 1),
+      id: uuid.v4() as string,
       content: initialInput,
       isDone: false,
     };
@@ -52,8 +53,8 @@ export default function App() {
   };
 
   const handleIsEdit = (id: string) => {
-    setIsEdit(true);
     setEditIndex(id);
+    setIsEdit(true);
   };
 
   const onEditTodo = (id: string, editedTodo: string) => {
