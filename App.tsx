@@ -1,33 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
-import { StatusBar } from 'expo-status-bar';
+import { TextInput, TouchableOpacity } from 'react-native';
 import uuid from 'react-native-uuid';
+import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { CheckIcon, EditIcon, DeleteIcon } from 'components/icons';
-import { IsDone, Todo } from 'types';
-import {
-  theme,
-  cssWrap,
-  primary,
-  activeWhite,
-  inactiveGray,
-  themePrimary,
-  themeActiveWhite,
-  themeBgBlack,
-  cssFlex1,
-  cssJustifyCenter,
-  cssFlexRow,
-  cssJustifyBetween,
-  cssWidthFull,
-  themeSize12,
-  themeSize16,
-  themeSize20,
-  themeSize32,
-  themeSize4,
-  themeWeight500,
-} from 'styles';
-import { TextInput, TouchableOpacity } from 'react-native';
 import { getItem, setItem } from 'storage/asyncStorage';
+import { IsDone, Todo } from 'types';
+import * as S from 'styles';
 
 export default function App() {
   const editInputRef = useRef<TextInput | null>(null);
@@ -104,7 +84,7 @@ export default function App() {
   }, [isEdit]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={S.theme}>
       <Container>
         <Title>TODO List</Title>
         <TodoInputView>
@@ -155,35 +135,35 @@ export default function App() {
 }
 
 const Container = styled.View`
-  ${cssFlex1}
-  ${cssJustifyCenter}
-  ${cssWidthFull}
-  padding: ${themeSize20};
-  background-color: ${themeBgBlack};
+  ${S.cssFlex1}
+  ${S.cssJustifyCenter}
+  ${S.cssWidthFull}
+  padding: ${S.themeSize20};
+  background-color: ${S.themeBgBlack};
 `;
 
 const Title = styled.Text`
-  margin-bottom: ${themeSize12};
-  padding-left: ${themeSize4};
-  font-size: ${themeSize32};
-  font-weight: ${themeWeight500};
-  color: ${themePrimary};
+  margin-bottom: ${S.themeSize12};
+  padding-left: ${S.themeSize4};
+  font-size: ${S.themeSize32};
+  font-weight: ${S.themeWeight500};
+  color: ${S.themePrimary};
 `;
 
 const TodoInputView = styled.View`
-  ${cssWidthFull}
+  ${S.cssWidthFull}
 `;
 
 const TodoTextInput = styled.TextInput.attrs({
   placeholder: '+ Add a Task',
-  placeholderTextColor: primary,
+  placeholderTextColor: S.primary,
 })`
-  ${cssWrap}
-  margin-bottom: ${themeSize12};
-  color: ${themeActiveWhite};
+  ${S.cssWrap}
+  margin-bottom: ${S.themeSize12};
+  color: ${S.themeActiveWhite};
 `;
 const TodoList = styled.ScrollView`
-  ${cssWidthFull}
+  ${S.cssWidthFull}
 `;
 
 const EditTextInput = styled.TextInput`
@@ -192,24 +172,24 @@ const EditTextInput = styled.TextInput`
 `;
 
 const TodoView = styled.View`
-  ${cssWrap}
-  ${cssFlexRow}
-  ${cssJustifyBetween}
+  ${S.cssWrap}
+  ${S.cssFlexRow}
+  ${S.cssJustifyBetween}
 `;
 
 const TodoTouchable = styled.TouchableOpacity`
-  ${cssFlexRow}
-  gap: ${themeSize12};
+  ${S.cssFlexRow}
+  gap: ${S.themeSize12};
   width: 80%;
 `;
 
 const TodoContent = styled.Text<IsDone>`
-  font-size: ${themeSize16};
-  color: ${({ isDone }) => (isDone ? inactiveGray : activeWhite)};
+  font-size: ${S.themeSize16};
+  color: ${({ isDone }) => (isDone ? S.inactiveGray : S.activeWhite)};
   ${({ isDone }) => isDone && 'text-decoration: line-through'};
 `;
 
 const ButtonGroupView = styled.View`
-  ${cssFlexRow}
-  gap: ${themeSize12};
+  ${S.cssFlexRow}
+  gap: ${S.themeSize12};
 `;
