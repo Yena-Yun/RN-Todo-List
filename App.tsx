@@ -27,14 +27,33 @@ import {
   themeWeight500,
 } from 'styles';
 import { TextInput, TouchableOpacity } from 'react-native';
+import { getItem, setItem } from 'storage/asyncStorage';
 
 export default function App() {
   const editInputRef = useRef<TextInput | null>(null);
   const [initialInput, onChange] = useState('');
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [editContent, onEditContent] = useState('');
   const [isEdit, setIsEdit] = useState(false);
   const [editIndex, setEditIndex] = useState('');
+  const [storageValues, setStorageValues] = useState<Todo[]>([]);
+
+  const saveAsyncStorage = async (newTodos: Todo[]) => {
+    try {
+      await setItem(newTodos);
+      setStorageValues(newTodos);
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    getAsyncValue();
+  }, []);
+
+  const getAsyncValue = async () => {
+    const storageTodos = await getItem();
+    setStorageValues(storageTodos);
+  };
 
   SplashScreen.preventAutoHideAsync();
 
@@ -50,15 +69,15 @@ export default function App() {
       content: initialInput,
       isDone: false,
     };
-    setTodos((todos) => [...todos, newTodo]);
+    saveAsyncStorage([...storageValues, newTodo]);
     onChange('');
   };
 
   const onCheckTodo = (id: string) => {
-    const newTodos = todos.map((todo) =>
+    const newTodos = storageValues.map((todo) =>
       todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
     );
-    setTodos(newTodos);
+    saveAsyncStorage(newTodos);
   };
 
   const handleIsEdit = (id: string) => {
@@ -66,18 +85,18 @@ export default function App() {
     setIsEdit(true);
   };
 
-  const onEditTodo = (id: string, editedTodo: string) => {
-    const newTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, content: editedTodo } : todo
+  const onEditTodo = (id: string, editedText: string) => {
+    const newTodos = storageValues.map((todo) =>
+      todo.id === id ? { ...todo, content: editedText } : todo
     );
-    setTodos(newTodos);
+    saveAsyncStorage(newTodos);
     onEditContent('');
     setIsEdit(false);
   };
 
   const onDeleteTodo = (id: string) => {
-    const newTodos = todos.filter((todo) => todo.id !== id);
-    setTodos(newTodos);
+    const newTodos = storageValues.filter((todo) => todo.id !== id);
+    saveAsyncStorage(newTodos);
   };
 
   useEffect(() => {
@@ -96,37 +115,38 @@ export default function App() {
           />
         </TodoInputView>
         <TodoList>
-          {todos.map(({ id, content, isDone }) => (
-            <TodoView key={id}>
-              {isEdit && id === editIndex ? (
-                <>
-                  <EditTextInput
-                    ref={editInputRef}
-                    value={editContent}
-                    onChangeText={onEditContent}
-                    onSubmitEditing={() => onEditTodo(id, editContent)}
-                  />
-                </>
-              ) : (
-                <>
-                  <TodoTouchable onPress={() => onCheckTodo(id)}>
-                    <CheckIcon isDone={isDone} />
-                    <TodoContent isDone={isDone}>{content}</TodoContent>
-                  </TodoTouchable>
-                  <ButtonGroupView>
-                    {!isDone && (
-                      <TouchableOpacity onPress={() => handleIsEdit(id)}>
-                        <EditIcon />
+          {storageValues.length > 0 &&
+            storageValues.map(({ id, content, isDone }) => (
+              <TodoView key={id}>
+                {isEdit && id === editIndex ? (
+                  <>
+                    <EditTextInput
+                      ref={editInputRef}
+                      value={editContent}
+                      onChangeText={onEditContent}
+                      onSubmitEditing={() => onEditTodo(id, editContent)}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <TodoTouchable onPress={() => onCheckTodo(id)}>
+                      <CheckIcon isDone={isDone} />
+                      <TodoContent isDone={isDone}>{content}</TodoContent>
+                    </TodoTouchable>
+                    <ButtonGroupView>
+                      {!isDone && (
+                        <TouchableOpacity onPress={() => handleIsEdit(id)}>
+                          <EditIcon />
+                        </TouchableOpacity>
+                      )}
+                      <TouchableOpacity onPress={() => onDeleteTodo(id)}>
+                        <DeleteIcon isDone={isDone} />
                       </TouchableOpacity>
-                    )}
-                    <TouchableOpacity onPress={() => onDeleteTodo(id)}>
-                      <DeleteIcon isDone={isDone} />
-                    </TouchableOpacity>
-                  </ButtonGroupView>
-                </>
-              )}
-            </TodoView>
-          ))}
+                    </ButtonGroupView>
+                  </>
+                )}
+              </TodoView>
+            ))}
         </TodoList>
         <StatusBar style='auto' />
       </Container>
