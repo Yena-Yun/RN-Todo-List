@@ -24,3 +24,11 @@
 * TodoInput을 모듈화하는 과정 중 `missed semicolon` 에러가 발생했다.
   * 세미콜론이 miss된 곳을 도저히 찾을 수 없었고 vscode 세미콜론 setting도 해봤지만 소용 없었다.
   * 해결: css.ts에 ${theme.size60} 등의 import해온 style 코드를 넣으면 발생한다는 걸 알게 되어 '60px' 등으로 다시 수정했다.
+* forwordRef 관련
+  * 다음과 같은 warning이 떠서 TodoInput을 forwardRef로 감쌌다. <br/>
+    <img src="https://github.com/Yena-Yun/RN-Todo-List/assets/68722179/3f329695-3300-4467-bec6-15244c6d2afc" width='400' /> <br/>
+  * forwardRef는 반드시 props와 ref 두 가지만 인자로 줘야 했다.
+  * 기존의 ref를 포함했던 interface에서 ref를 제거하고 props에만 타입을 주었다. <br/>
+    <img src="https://github.com/Yena-Yun/RN-Todo-List/assets/68722179/e3759e7b-25d2-4e18-b8b1-d244e37f519a" width='500' /> <br/>
+
+
