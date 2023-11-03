@@ -23,6 +23,9 @@
   * 기기마다 다른 width를 부여할 때 사용
   * 현재 기기의 화면 크기를 알 수 있음
   * 다양한 크기의 기기에서 동일한 모습으로 나타날 수 있도록 구현
+  * 사용: `const width = Dimensions.get('window').width;`로 width를 가져와서 props로 전달하고<br/>
+   styled-components에서 `width: ${({ width }) => width - 40}px`(width 타입은 number) <br/>
+   => 기기의 양쪽에 동일하게 20px씩 여백이 생김
 
 
 ## 트러블 슈팅
