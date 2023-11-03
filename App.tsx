@@ -111,17 +111,17 @@ export default function App() {
                 ) : (
                   <TodoView>
                     <TodoTouchable onPress={() => onCheckTodo(id)}>
-                      <CheckIcon isDone={isDone} />
+                      <CheckIcon size={24} isDone={isDone} />
                       <TodoContent isDone={isDone}>{content}</TodoContent>
                     </TodoTouchable>
                     <ButtonGroupView>
                       {!isDone && (
                         <TouchableOpacity onPress={() => handleIsEdit(id)}>
-                          <EditIcon />
+                          <EditIcon size={24} color={S.activeWhite} />
                         </TouchableOpacity>
                       )}
                       <TouchableOpacity onPress={() => onDeleteTodo(id)}>
-                        <DeleteIcon isDone={isDone} />
+                        <DeleteIcon size={24} isDone={isDone} />
                       </TouchableOpacity>
                     </ButtonGroupView>
                   </TodoView>

@@ -1,12 +1,16 @@
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { activeWhite, inactiveGray } from 'styles';
-import { IsDone } from 'types';
 
-export const CheckIcon = ({ isDone }: IsDone) => {
+interface CheckIconProps {
+  size?: number;
+  isDone?: boolean;
+}
+
+export const CheckIcon = ({ size, isDone }: CheckIconProps) => {
   return (
     <FeatherIcon
       name={isDone ? 'check-square' : 'square'}
-      size={24}
+      size={size}
       color={isDone ? inactiveGray : activeWhite}
     />
   );
