@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import * as S from 'styles';
 
 interface TodoInputProps {
-  width: number;
+  width?: number;
   value: string;
   onChangeText: (text: string) => void;
   onSubmitEditing: () => void;
