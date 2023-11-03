@@ -19,6 +19,11 @@
     * `backgroundColor`: StatusBar의 배경색 변경
     * `barStyle`: StatusBar의 시간, 와이파이 등 글자색 변경 (default, light-content, dark-content 3가지)
 
+* Dimension, useDimension
+  * 기기마다 다른 width를 부여할 때 사용
+  * 현재 기기의 화면 크기를 알 수 있음
+  * 다양한 크기의 기기에서 동일한 모습으로 나타날 수 있도록 구현
+
 
 ## 트러블 슈팅
 * TodoInput을 모듈화하는 과정 중 `missed semicolon` 에러가 발생했다.
