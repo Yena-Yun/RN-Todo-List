@@ -21,7 +21,6 @@ export const cssWidthFull = css`
 `;
 
 export const cssTodoContainer = css`
-  width: 100%;
   height: 60px;
   margin-bottom: 12px;
   padding: 12px 20px;
