@@ -18,15 +18,20 @@
   * 색상 관련 속성
     * `backgroundColor`: StatusBar의 배경색 변경
     * `barStyle`: StatusBar의 시간, 와이파이 등 글자색 변경 (default, light-content, dark-content 3가지)
-
-* Dimension, useDimension
+* Dimensions
   * 기기마다 다른 width를 부여할 때 사용
   * 현재 기기의 화면 크기를 알 수 있음
   * 다양한 크기의 기기에서 동일한 모습으로 나타날 수 있도록 구현
-  * 사용: `const width = Dimensions.get('window').width;`로 width를 가져와서 props로 전달하고<br/>
+  * 사용: `const width = Dimensions.get('window').width`로 width를 가져와서 props로 전달하고<br/>
    styled-components에서 `width: ${({ width }) => width - 40}px`(width 타입은 number) <br/>
    => 기기의 양쪽에 동일하게 20px씩 여백이 생김
-
+* useWindowDimensions
+  * Dimensions는 고정된 값이라 기기를 회전하면 여백이 안 맞아질 수 있음
+  * 화면의 크기가 변경되면 값을 자동으로 업데이트
+  * 사용: Dimensions와 거의 비, `const width = useWindowDimensions().width`로 width를 가져옴
+* flex: 1
+  * Todo의 각 항목을 구현할 때 IconButton 3개 외에 텍스트 컨텐츠 부분으로 꽉 채우기 위해 부모 Container에 flex: 1을 부여
+  * IconButton의 사이즈가 고정되어 있다는 전제 하에, 가운데 입력된 텍스트 영역이 버튼을 제외하고 꽉 채워짐
 
 ## 트러블 슈팅
 * TodoInput을 모듈화하는 과정 중 `missed semicolon` 에러가 발생했다.
