@@ -1,10 +1,11 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
-import { View, TextInput, TouchableOpacity } from 'react-native';
+import { TextInput, Dimensions } from 'react-native';
 import uuid from 'react-native-uuid';
 import { StatusBar } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { TodoInput } from 'components/TodoInput';
+import { IconButton } from 'components/IconButton';
 import { CheckIcon, EditIcon, DeleteIcon } from 'components/icons';
 import { getItem, setItem } from 'storage/asyncStorage';
 import { IsDone, Todo } from 'types';
@@ -17,6 +18,7 @@ export default function App() {
   const [isEdit, setIsEdit] = useState(false);
   const [editIndex, setEditIndex] = useState('');
   const [storageValues, setStorageValues] = useState<Todo[]>([]);
+  const width = Dimensions.get('window').width;
 
   const saveAsyncStorage = async (newTodos: Todo[]) => {
     try {
@@ -88,15 +90,13 @@ export default function App() {
     <ThemeProvider theme={S.theme}>
       <Container>
         <Title>TODO List</Title>
-        <View>
-          <TodoInput
-            value={initialInput}
-            onChangeText={onChange}
-            onSubmitEditing={onCreateTodo}
-            placeholder='+ Add a Task'
-          />
-        </View>
-        <TodoList>
+        <TodoInput
+          value={initialInput}
+          onChangeText={onChange}
+          onSubmitEditing={onCreateTodo}
+          placeholder='+ Add a Task'
+        />
+        <TodoList width={width}>
           {storageValues.length > 0 &&
             storageValues.map(({ id, content, isDone }) => (
               <Fragment key={id}>
@@ -116,13 +116,13 @@ export default function App() {
                     </TodoTouchable>
                     <ButtonGroupView>
                       {!isDone && (
-                        <TouchableOpacity onPress={() => handleIsEdit(id)}>
+                        <IconButton onPress={() => handleIsEdit(id)}>
                           <EditIcon size={24} color={S.activeWhite} />
-                        </TouchableOpacity>
+                        </IconButton>
                       )}
-                      <TouchableOpacity onPress={() => onDeleteTodo(id)}>
+                      <IconButton onPress={() => onDeleteTodo(id)}>
                         <DeleteIcon size={24} isDone={isDone} />
-                      </TouchableOpacity>
+                      </IconButton>
                     </ButtonGroupView>
                   </TodoView>
                 )}
@@ -151,8 +151,8 @@ const Title = styled.Text`
   color: ${S.themePrimary};
 `;
 
-const TodoList = styled.ScrollView`
-  ${S.cssWidthFull}
+const TodoList = styled.ScrollView<{ width: number }>`
+  width: ${({ width }) => width - 40}px;
 `;
 
 const TodoView = styled.View`
