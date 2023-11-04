@@ -45,7 +45,7 @@ export default function App() {
     }, 1000);
   }, []);
 
-  const onCreateTodo = () => {
+  const onCreateTask = () => {
     if (!initialInput) return;
 
     const newTodo = {
@@ -57,7 +57,7 @@ export default function App() {
     onChange('');
   };
 
-  const onCheckTodo = (id: string) => {
+  const onToggleTask = (id: string) => {
     const newTodos = storageValues.map((todo) =>
       todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
     );
@@ -69,7 +69,7 @@ export default function App() {
     setIsEdit(true);
   };
 
-  const onEditTodo = (id: string, editedText: string) => {
+  const onEditTask = (id: string, editedText: string) => {
     const newTodos = storageValues.map((todo) =>
       todo.id === id ? { ...todo, content: editedText } : todo
     );
@@ -78,7 +78,7 @@ export default function App() {
     setIsEdit(false);
   };
 
-  const onDeleteTodo = (id: string) => {
+  const onDeleteTask = (id: string) => {
     const newTodos = storageValues.filter((todo) => todo.id !== id);
     saveAsyncStorage(newTodos);
   };
@@ -94,7 +94,7 @@ export default function App() {
         <TodoInput
           value={initialInput}
           onChangeText={onChange}
-          onSubmitEditing={onCreateTodo}
+          onSubmitEditing={onCreateTask}
           placeholder='+ Add a Task'
         />
         <TodoList width={width}>
@@ -107,15 +107,15 @@ export default function App() {
                       ref={editInputRef}
                       value={editContent}
                       onChangeText={onEditContent}
-                      onSubmitEditing={() => onEditTodo(id, editContent)}
+                      onSubmitEditing={() => onEditTask(id, editContent)}
                       placeholder='Edit a Task'
                     />
                   ) : (
                     <TodoTask
                       task={{ id, content, isDone }}
-                      onCheckTodo={onCheckTodo}
+                      onToggleTask={onToggleTask}
                       handleIsEdit={handleIsEdit}
-                      onDeleteTodo={onDeleteTodo}
+                      onDeleteTask={onDeleteTask}
                     />
                   )}
                 </Fragment>

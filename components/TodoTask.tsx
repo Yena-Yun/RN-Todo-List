@@ -10,34 +10,34 @@ interface TodoTaskProps {
     content: string;
     isDone: boolean;
   };
-  onCheckTodo: (id: string) => void;
+  onToggleTask: (id: string) => void;
   handleIsEdit: (id: string) => void;
-  onDeleteTodo: (id: string) => void;
+  onDeleteTask: (id: string) => void;
 }
 
 export const TodoTask = ({
   task,
-  onCheckTodo,
+  onToggleTask,
   handleIsEdit,
-  onDeleteTodo,
+  onDeleteTask,
 }: TodoTaskProps) => {
   const { id, content, isDone } = task;
 
-  const _onCheckTodo = () => {
-    onCheckTodo(id);
+  const _onToggleTask = () => {
+    onToggleTask(id);
   };
 
   const _handleIsEdit = () => {
     handleIsEdit(id);
   };
 
-  const _onDeleteTodo = () => {
-    onDeleteTodo(id);
+  const _onDeleteTask = () => {
+    onDeleteTask(id);
   };
 
   return (
     <TodoView>
-      <TodoTouchable onPress={_onCheckTodo}>
+      <TodoTouchable onPress={_onToggleTask}>
         <CheckIcon size={24} isDone={isDone} />
         <TodoContent isDone={isDone}>{content}</TodoContent>
       </TodoTouchable>
@@ -47,7 +47,7 @@ export const TodoTask = ({
             <EditIcon size={24} color={S.activeWhite} />
           </IconButton>
         )}
-        <IconButton onPress={_onDeleteTodo}>
+        <IconButton onPress={_onDeleteTask}>
           <DeleteIcon size={24} isDone={isDone} />
         </IconButton>
       </ButtonGroupView>
