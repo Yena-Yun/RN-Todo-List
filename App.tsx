@@ -5,11 +5,10 @@ import uuid from 'react-native-uuid';
 import { StatusBar } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { TodoInput } from 'components/TodoInput';
-import { IconButton } from 'components/IconButton';
-import { CheckIcon, EditIcon, DeleteIcon } from 'components/icons';
+import { TodoTask } from 'components/TodoTask';
 import { getItem, setItem } from 'storage/asyncStorage';
-import { IsDone, Todo } from 'types';
 import * as S from 'styles';
+import { Todo } from 'types';
 
 export default function App() {
   const editInputRef = useRef<TextInput | null>(null);
@@ -47,12 +46,14 @@ export default function App() {
   }, []);
 
   const onCreateTodo = () => {
+    if (!initialInput) return;
+
     const newTodo = {
       id: uuid.v4() as string,
       content: initialInput,
       isDone: false,
     };
-    saveAsyncStorage([...storageValues, newTodo]);
+    saveAsyncStorage([newTodo, ...storageValues]); // 인풋 칠 때 바뀌는 거 + 순서 역순 (해결!!)
     onChange('');
   };
 
@@ -98,36 +99,30 @@ export default function App() {
         />
         <TodoList width={width}>
           {storageValues.length > 0 &&
-            storageValues.map(({ id, content, isDone }) => (
-              <Fragment key={id}>
-                {isEdit && id === editIndex ? (
-                  <TodoInput
-                    ref={editInputRef}
-                    value={editContent}
-                    onChangeText={onEditContent}
-                    onSubmitEditing={() => onEditTodo(id, editContent)}
-                    placeholder='Edit a Task'
-                  />
-                ) : (
-                  <TodoView>
-                    <TodoTouchable onPress={() => onCheckTodo(id)}>
-                      <CheckIcon size={24} isDone={isDone} />
-                      <TodoContent isDone={isDone}>{content}</TodoContent>
-                    </TodoTouchable>
-                    <ButtonGroupView>
-                      {!isDone && (
-                        <IconButton onPress={() => handleIsEdit(id)}>
-                          <EditIcon size={24} color={S.activeWhite} />
-                        </IconButton>
-                      )}
-                      <IconButton onPress={() => onDeleteTodo(id)}>
-                        <DeleteIcon size={24} isDone={isDone} />
-                      </IconButton>
-                    </ButtonGroupView>
-                  </TodoView>
-                )}
-              </Fragment>
-            ))}
+            storageValues.map(({ id, content, isDone }) => {
+              return (
+                <Fragment key={id}>
+                  {isEdit && id === editIndex ? (
+                    <TodoInput
+                      ref={editInputRef}
+                      value={editContent}
+                      onChangeText={onEditContent}
+                      onSubmitEditing={() => onEditTodo(id, editContent)}
+                      placeholder='Edit a Task'
+                    />
+                  ) : (
+                    <TodoTask
+                      id={id}
+                      content={content}
+                      isDone={isDone}
+                      onCheckTodo={onCheckTodo}
+                      handleIsEdit={handleIsEdit}
+                      onDeleteTodo={onDeleteTodo}
+                    />
+                  )}
+                </Fragment>
+              );
+            })}
         </TodoList>
         <StatusBar barStyle='light-content' backgroundColor={S.bgBlack} />
       </Container>
@@ -153,27 +148,4 @@ const Title = styled.Text`
 
 const TodoList = styled.ScrollView<{ width: number }>`
   width: ${({ width }) => width - 40}px;
-`;
-
-const TodoView = styled.View`
-  ${S.cssTodoContainer}
-  ${S.cssFlexRow}
-  ${S.cssJustifyBetween}
-`;
-
-const TodoTouchable = styled.TouchableOpacity`
-  ${S.cssFlexRow}
-  gap: ${S.themeSize12};
-  width: 80%;
-`;
-
-const TodoContent = styled.Text<IsDone>`
-  font-size: ${S.themeSize16};
-  color: ${({ isDone }) => (isDone ? S.inactiveGray : S.activeWhite)};
-  ${({ isDone }) => isDone && 'text-decoration: line-through'};
-`;
-
-const ButtonGroupView = styled.View`
-  ${S.cssFlexRow}
-  gap: ${S.themeSize12};
 `;
