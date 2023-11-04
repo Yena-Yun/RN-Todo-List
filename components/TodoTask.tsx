@@ -5,22 +5,24 @@ import * as S from 'styles';
 import { IsDone } from 'types';
 
 interface TodoTaskProps {
-  id: string;
-  content: string;
-  isDone: boolean;
+  task: {
+    id: string;
+    content: string;
+    isDone: boolean;
+  };
   onCheckTodo: (id: string) => void;
   handleIsEdit: (id: string) => void;
   onDeleteTodo: (id: string) => void;
 }
 
 export const TodoTask = ({
-  id,
-  content,
-  isDone,
+  task,
   onCheckTodo,
   handleIsEdit,
   onDeleteTodo,
 }: TodoTaskProps) => {
+  const { id, content, isDone } = task;
+
   return (
     <TodoView>
       <TodoTouchable onPress={() => onCheckTodo(id)}>

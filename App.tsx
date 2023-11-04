@@ -112,9 +112,7 @@ export default function App() {
                     />
                   ) : (
                     <TodoTask
-                      id={id}
-                      content={content}
-                      isDone={isDone}
+                      task={{ id, content, isDone }}
                       onCheckTodo={onCheckTodo}
                       handleIsEdit={handleIsEdit}
                       onDeleteTodo={onDeleteTodo}
