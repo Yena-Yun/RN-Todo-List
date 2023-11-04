@@ -23,19 +23,31 @@ export const TodoTask = ({
 }: TodoTaskProps) => {
   const { id, content, isDone } = task;
 
+  const _onCheckTodo = () => {
+    onCheckTodo(id);
+  };
+
+  const _handleIsEdit = () => {
+    handleIsEdit(id);
+  };
+
+  const _onDeleteTodo = () => {
+    onDeleteTodo(id);
+  };
+
   return (
     <TodoView>
-      <TodoTouchable onPress={() => onCheckTodo(id)}>
+      <TodoTouchable onPress={_onCheckTodo}>
         <CheckIcon size={24} isDone={isDone} />
         <TodoContent isDone={isDone}>{content}</TodoContent>
       </TodoTouchable>
       <ButtonGroupView>
         {!isDone && (
-          <IconButton onPress={() => handleIsEdit(id)}>
+          <IconButton onPress={_handleIsEdit}>
             <EditIcon size={24} color={S.activeWhite} />
           </IconButton>
         )}
-        <IconButton onPress={() => onDeleteTodo(id)}>
+        <IconButton onPress={_onDeleteTodo}>
           <DeleteIcon size={24} isDone={isDone} />
         </IconButton>
       </ButtonGroupView>
