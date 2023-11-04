@@ -1,13 +1,31 @@
-# RN-Todo-List
-리액트 네이티브 실습
+# RN 실습
 
-## 강의 듣기 전 구현해본 내용
+## ⛳ 강의 듣기 전 먼저 구현
 * Todo CRUD (등록, 조회, 수정, 삭제)
 * 첫 로딩 Splash 화면
 * AsyncStorage 데이터 저장 (새로고침 유지)
 * 수정 인풋에 auto focus
 
-## 강의를 들으면서 새로 배운 점
+## 🧨 작업 중 트러블 슈팅
+* TodoInput을 모듈화하는 과정 중 `missed semicolon` 에러 발생
+  * 세미콜론이 miss된 곳이 없었고 vscode setting의 semicolon도 모두 체크했지만 해결 x
+  * 해결: 조사 후 css.ts에 ${theme.size60} 등의 import해온 style 코드를 넣으면 발생하는 에러란 걸 알게 되어 기존의 '60px' 등으로 다시 수정 <br/>
+* forwordRef 관련 경고
+  * 다음과 같은 warning이 뜸 <br/>
+    <img src="https://github.com/Yena-Yun/RN-Todo-List/assets/68722179/3f329695-3300-4467-bec6-15244c6d2afc" width='400' /> <br/>
+  * 해결: TodoInput을 forwardRef로 감싸고 forwardRef 컴포넌트에 props와 ref 두 가지를 인자로 부여 (기존에 interface에 있던 ref를 제거하고 props에만 타입 제공) <br/>
+    <img src="https://github.com/Yena-Yun/RN-Todo-List/assets/68722179/e3759e7b-25d2-4e18-b8b1-d244e37f519a" width='500' /> <br/> <br/>
+* `렌더링할 데이터.map()`에 `reverse()` 추가 시 발생한 버벅임
+  * storageValues.reverse().map()을 통해 todo 항목을 최신부터 렌더링하려고 시도
+    * 백엔드나 mock 데이터의 날짜 데이터가 없어서 단순히 등록될 때의 역순으로 데이터 정렬 시도
+  * reverse()를 붙인 후 발생한 문제
+    * 새로운 todo를 입력할 때 한 글자 칠 때마다 매번 todo 정렬이 바뀜
+    * 새로 todo가 추가될 때도 잠깐 기존을 보여줬다가 순식간에 역행으로 바뀜
+  * 해결: onCreateTodo 함수에서 saveAsyncStorage에 newTodo가 추가되는 위치를 뒤에서 앞으로 옮김 (newTodo가 기존 값(...storageValues)보다 먼저 추가되도록 설정)
+    * `saveAsyncStorage([...storageValues, newTodo])` -> `saveAsyncStorage([newTodo, ...storageValues])`
+
+
+## 🥏 강의에서 새로 배운 점
 * SafeAreaView
   * iOS에만 적용 (Android는 x)
   * 아이폰의 notch 디자인(상단에 가려지는 부분)을 피하기 위해 자체적 padding이 들어간 View
@@ -28,20 +46,9 @@
 * useWindowDimensions
   * Dimensions는 고정된 값이라 기기를 회전하면 여백이 안 맞아질 수 있음
   * 화면의 크기가 변경되면 값을 자동으로 업데이트
-  * 사용: Dimensions와 거의 비, `const width = useWindowDimensions().width`로 width를 가져옴
+  * 사용: Dimensions와 유사, `const width = useWindowDimensions().width`로 width를 가져옴
 * flex: 1
-  * Todo의 각 항목을 구현할 때 IconButton 3개 외에 텍스트 컨텐츠 부분으로 꽉 채우기 위해 부모 Container에 flex: 1을 부여
-  * IconButton의 사이즈가 고정되어 있다는 전제 하에, 가운데 입력된 텍스트 영역이 버튼을 제외하고 꽉 채워짐
-
-## 트러블 슈팅
-* TodoInput을 모듈화하는 과정 중 `missed semicolon` 에러가 발생했다.
-  * 세미콜론이 miss된 곳을 도저히 찾을 수 없었고 vscode 세미콜론 setting도 해봤지만 소용 없었다.
-  * 해결: css.ts에 ${theme.size60} 등의 import해온 style 코드를 넣으면 발생한다는 걸 알게 되어 '60px' 등으로 다시 수정했다.
-* forwordRef 관련
-  * 다음과 같은 warning이 떠서 TodoInput을 forwardRef로 감쌌다. <br/>
-    <img src="https://github.com/Yena-Yun/RN-Todo-List/assets/68722179/3f329695-3300-4467-bec6-15244c6d2afc" width='400' /> <br/>
-  * forwardRef는 반드시 props와 ref 두 가지만 인자로 줘야 했다.
-  * 기존의 ref를 포함했던 interface에서 ref를 제거하고 props에만 타입을 주었다. <br/>
-    <img src="https://github.com/Yena-Yun/RN-Todo-List/assets/68722179/e3759e7b-25d2-4e18-b8b1-d244e37f519a" width='500' /> <br/>
+  * Todo의 각 항목을 구현할 때 IconButton 3개 외에 텍스트 컨텐츠 부분으로 꽉 채우기 위해 부모 Container에 `flex: 1`을 부여
+  * 결과: IconButton의 사이즈가 고정되어 있다는 전제 하에, 가운데 입력된 텍스트 영역이 버튼을 제외하고 꽉 채워짐
 
 
