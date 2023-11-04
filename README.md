@@ -56,6 +56,7 @@
 * AsyncStorage
   * RN의 로컬스토리지
   * string 타입의 key: value 데이터를  기기에 **비동기**로 저장하고 불러옴
+  * 비동기로 동작하기 때문에 async/await(+ try/catch) 필요
   * 앱을 처음 켰을 때나 새로고침 시 데이터 유지
 
 
