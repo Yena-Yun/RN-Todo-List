@@ -2,17 +2,19 @@ import { forwardRef } from 'react';
 import { Dimensions } from 'react-native';
 import styled from 'styled-components/native';
 import * as S from 'styles';
+import { DeviceWidth } from 'types';
 
 interface TodoInputProps {
   width?: number;
   value: string;
   onChangeText: (text: string) => void;
   onSubmitEditing: () => void;
+  onBlur: () => void;
   placeholder: string;
 }
 
 export const TodoInput = forwardRef((props: TodoInputProps, ref) => {
-  const { value, onChangeText, onSubmitEditing, placeholder } = props;
+  const { value, onChangeText, onSubmitEditing, onBlur, placeholder } = props;
 
   const width = Dimensions.get('window').width;
 
@@ -23,6 +25,7 @@ export const TodoInput = forwardRef((props: TodoInputProps, ref) => {
       value={value}
       onChangeText={onChangeText}
       onSubmitEditing={onSubmitEditing}
+      onBlur={onBlur}
       placeholder={placeholder}
       maxLength={50}
       autoCapitalize='none' // 자동 대문자 끄기
@@ -35,7 +38,7 @@ export const TodoInput = forwardRef((props: TodoInputProps, ref) => {
 
 const TodoTextInput = styled.TextInput.attrs({
   placeholderTextColor: S.primary,
-})<{ width: number }>`
+})<DeviceWidth>`
   ${S.cssTodoContainer};
   width: ${({ width }) => width - 40}px;
 `;

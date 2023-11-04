@@ -8,10 +8,10 @@ import { TodoInput } from 'components/TodoInput';
 import { TodoTask } from 'components/TodoTask';
 import { getItem, setItem } from 'storage/asyncStorage';
 import * as S from 'styles';
-import { Todo } from 'types';
+import { DeviceWidth, Todo } from 'types';
 
 export default function App() {
-  const editInputRef = useRef<TextInput | null>(null);
+  const inputRef = useRef<TextInput | null>(null);
   const [initialInput, onChange] = useState('');
   const [editContent, onEditContent] = useState('');
   const [isEdit, setIsEdit] = useState(false);
@@ -19,7 +19,15 @@ export default function App() {
   const [storageValues, setStorageValues] = useState<Todo[]>([]);
   const width = Dimensions.get('window').width;
 
-  const saveAsyncStorage = async (newTodos: Todo[]) => {
+  SplashScreen.preventAutoHideAsync();
+
+  useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hideAsync();
+    }, 1000);
+  }, []);
+
+  const saveAsyncValue = async (newTodos: Todo[]) => {
     try {
       await setItem(newTodos);
       setStorageValues(newTodos);
@@ -37,14 +45,6 @@ export default function App() {
     setStorageValues(storageTodos);
   };
 
-  SplashScreen.preventAutoHideAsync();
-
-  useEffect(() => {
-    setTimeout(() => {
-      SplashScreen.hideAsync();
-    }, 1000);
-  }, []);
-
   const onCreateTask = () => {
     if (!initialInput) return;
 
@@ -53,7 +53,7 @@ export default function App() {
       content: initialInput,
       isDone: false,
     };
-    saveAsyncStorage([newTodo, ...storageValues]); // 인풋 칠 때 바뀌는 거 + 순서 역순 (해결!!)
+    saveAsyncValue([newTodo, ...storageValues]); // 인풋 칠 때 바뀌는 거 + 순서 역순 (해결!!)
     onChange('');
   };
 
@@ -61,7 +61,7 @@ export default function App() {
     const newTodos = storageValues.map((todo) =>
       todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
     );
-    saveAsyncStorage(newTodos);
+    saveAsyncValue(newTodos);
   };
 
   const handleIsEdit = (id: string) => {
@@ -73,18 +73,18 @@ export default function App() {
     const newTodos = storageValues.map((todo) =>
       todo.id === id ? { ...todo, content: editedText } : todo
     );
-    saveAsyncStorage(newTodos);
+    saveAsyncValue(newTodos);
     onEditContent('');
     setIsEdit(false);
   };
 
   const onDeleteTask = (id: string) => {
     const newTodos = storageValues.filter((todo) => todo.id !== id);
-    saveAsyncStorage(newTodos);
+    saveAsyncValue(newTodos);
   };
 
   useEffect(() => {
-    if (editInputRef.current) editInputRef.current.focus();
+    if (inputRef.current) inputRef.current.focus();
   }, [isEdit]);
 
   return (
@@ -92,35 +92,39 @@ export default function App() {
       <Container>
         <Title>TODO List</Title>
         <TodoInput
+          ref={inputRef}
           value={initialInput}
           onChangeText={onChange}
           onSubmitEditing={onCreateTask}
+          onBlur={() => onChange('')}
           placeholder='+ Add a Task'
         />
         <TodoList width={width}>
           {storageValues.length > 0 &&
-            storageValues.map(({ id, content, isDone }) => {
-              return (
-                <Fragment key={id}>
-                  {isEdit && id === editIndex ? (
-                    <TodoInput
-                      ref={editInputRef}
-                      value={editContent}
-                      onChangeText={onEditContent}
-                      onSubmitEditing={() => onEditTask(id, editContent)}
-                      placeholder='Edit a Task'
-                    />
-                  ) : (
-                    <TodoTask
-                      task={{ id, content, isDone }}
-                      onToggleTask={onToggleTask}
-                      handleIsEdit={handleIsEdit}
-                      onDeleteTask={onDeleteTask}
-                    />
-                  )}
-                </Fragment>
-              );
-            })}
+            storageValues.map(({ id, content, isDone }) => (
+              <Fragment key={id}>
+                {isEdit && id === editIndex ? (
+                  <TodoInput
+                    ref={inputRef}
+                    value={editContent}
+                    onChangeText={onEditContent}
+                    onSubmitEditing={() => onEditTask(id, editContent)}
+                    onBlur={() => {
+                      onEditContent('');
+                      setIsEdit(false);
+                    }}
+                    placeholder='Edit a Task'
+                  />
+                ) : (
+                  <TodoTask
+                    task={{ id, content, isDone }}
+                    onToggleTask={onToggleTask}
+                    handleIsEdit={handleIsEdit}
+                    onDeleteTask={onDeleteTask}
+                  />
+                )}
+              </Fragment>
+            ))}
         </TodoList>
         <StatusBar barStyle='light-content' backgroundColor={S.bgBlack} />
       </Container>
@@ -144,6 +148,6 @@ const Title = styled.Text`
   color: ${S.themePrimary};
 `;
 
-const TodoList = styled.ScrollView<{ width: number }>`
+const TodoList = styled.ScrollView<DeviceWidth>`
   width: ${({ width }) => width - 40}px;
 `;

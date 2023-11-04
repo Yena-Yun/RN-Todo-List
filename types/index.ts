@@ -5,3 +5,5 @@ export interface Todo {
 }
 
 export type IsDone = Pick<Todo, 'isDone'>;
+
+export type DeviceWidth = { width: number };
