@@ -47,8 +47,15 @@
   * Dimensions는 고정된 값이라 기기를 회전하면 여백이 안 맞아질 수 있음
   * 화면의 크기가 변경되면 값을 자동으로 업데이트
   * 사용: Dimensions와 유사, `const width = useWindowDimensions().width`로 width를 가져옴
-* flex: 1
+* flex: 1을 통한 스타일링
   * Todo의 각 항목을 구현할 때 IconButton 3개 외에 텍스트 컨텐츠 부분으로 꽉 채우기 위해 부모 Container에 `flex: 1`을 부여
   * 결과: IconButton의 사이즈가 고정되어 있다는 전제 하에, 가운데 입력된 텍스트 영역이 버튼을 제외하고 꽉 채워짐
+* TextInput의 onBlur 속성
+  * 인풋의 바깥쪽을 눌렀을 때 실행할 함수를 넣어서 사용
+  * 예: Edit 인풋 입력 중 Add 인풋 터치 시 Edit 입력 초기화 (반대도 마찬가지)
+* AsyncStorage
+  * RN의 로컬스토리지
+  * string 타입의 key: value 데이터를  기기에 **비동기**로 저장하고 불러옴
+  * 앱을 처음 켰을 때나 새로고침 시 데이터 유지
 
 
